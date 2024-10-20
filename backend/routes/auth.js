@@ -44,7 +44,7 @@ router.post("/login", async (req, res) => {
 });
 router.get("/Tarea", authMiddleware, async (req, res) => {
   try {
-    const tareas = await Tarea.find();
+    const tareas = await Tarea.find({usuario:req.userId});
     res.status(200).send(tareas);
   } catch (error) {
     res.status(500).send("Error al obtener usuarios" + error.message);
@@ -52,9 +52,13 @@ router.get("/Tarea", authMiddleware, async (req, res) => {
 });
 router.post("/Tarea", authMiddleware, async (req, res) => {
   try {
-    const nuevaTarea = new Tarea(req.body);
+    const userId = req.userId;
+
+    const nuevaTarea = new Tarea({
+      ...req.body,usuario:userId
+    });
     const tareaguardado = await nuevaTarea.save();
-    res.status(200).send(tareaguardado);
+    res.status(201).send(tareaguardado);
   } catch (error) {
     res.status(400).send(error);
   }
