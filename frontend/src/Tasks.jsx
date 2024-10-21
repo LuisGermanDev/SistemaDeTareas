@@ -39,6 +39,9 @@ const Tasks = () => {
   const handleCreateTask = () => {
     navigate('/create-task'); // Redirigir a la ruta de creación de tareas
   };
+  const handleEditTask = (id) => {
+    navigate(`/edit-task/${id}`); // Redirigir a la ruta de edición con el id de la tarea
+  };
   return (
     <div>
       <h1>Mis Tareas</h1>
@@ -51,6 +54,8 @@ const Tasks = () => {
             <h3>{task.titulo}</h3>
             <p>{task.descripcion}</p>
             <p>{task.fechaVencimiento}</p>
+            <p>Estado: {task.estado ? 'Hecho' : 'Pendiente'}</p>
+            <button onClick={() => handleEditTask(task._id)}>Editar</button>
             <button onClick={() => handleDelete(task._id)}>Eliminar</button>
           </li>
         ))}

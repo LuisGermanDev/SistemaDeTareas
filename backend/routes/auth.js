@@ -63,7 +63,7 @@ router.post("/Tarea", authMiddleware, async (req, res) => {
     res.status(400).send(error);
   }
 });
-router.put("/Tarea", authMiddleware, async (req, res) => {
+router.put("/Tarea/:id", authMiddleware, async (req, res) => {
   try {
     const tareasActualizada = await Tarea.findByIdAndUpdate(
       req.params.id,
@@ -79,11 +79,12 @@ router.put("/Tarea", authMiddleware, async (req, res) => {
     res.status(400).send(error);
   }
 });
-router.delete("/Tarea", authMiddleware, async (req, res) => {
+router.delete("/Tarea/:id", authMiddleware, async (req, res) => {
   try {
+
     const tareaEliminada = await Tarea.findByIdAndDelete(req.params.id);
     if (!tareaEliminada)
-      return res.status(400).send("la tarea no se encuentra");
+      return res.status(404).send("la tarea no se encuentra");
     res.status(200).send(tareaEliminada);
   } catch (error) {
     res.status(500).send(error);
