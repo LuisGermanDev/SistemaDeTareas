@@ -42,6 +42,25 @@ const Tasks = () => {
   const handleEditTask = (id) => {
     navigate(`/edit-task/${id}`); // Redirigir a la ruta de edición con el id de la tarea
   };
+  const toggleTaskStatus = async (id, currentStatus) => {
+    try {
+      const token = localStorage.getItem('token');
+      const newStatus = !currentStatus; // Cambiar de true a false o de false a true
+      await axios.put(
+        `http://localhost:3000/Tarea/${id}`, 
+        { estado: newStatus }, // Enviar solo la actualización del estado
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      // Actualizar la lista de tareas localmente
+      setTasks(tasks.map((task) =>
+        task._id === id ? { ...task, estado: newStatus } : task
+      ));
+    } catch (error) {
+      console.log("Error al actualizar el estado de la tarea", error);
+    }
+  };
   return (
     <div>
       <h1>Mis Tareas</h1>
@@ -57,6 +76,9 @@ const Tasks = () => {
             <p>Estado: {task.estado ? 'Hecho' : 'Pendiente'}</p>
             <button onClick={() => handleEditTask(task._id)}>Editar</button>
             <button onClick={() => handleDelete(task._id)}>Eliminar</button>
+            <button onClick={() => toggleTaskStatus(task._id, task.estado)}>
+              {task.estado ? 'Marcar como Pendiente' : 'Marcar como Hecho'}
+            </button>
           </li>
         ))}
       </ul>
